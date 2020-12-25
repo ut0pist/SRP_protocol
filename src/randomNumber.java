@@ -27,7 +27,7 @@ public class randomNumber {
         return p;
     }
 
-    private boolean RabinMillerTest(int p) {
+    public boolean RabinMillerTest(int p) {
         if (p % 2 == 0) return false;
         // ---тест Рабина - Миллера--- //
         //находим b

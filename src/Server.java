@@ -5,47 +5,27 @@ import java.nio.charset.StandardCharsets;
 
 public class Server {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
-    private final int k = 3, g = 2;
+    private randomNumber randomNumber = new randomNumber();
     private shaUtils shaUtils;
 
-    private String I, s, u;
+    private final int k = 3, g = 2;
+    private String I, s, u, K, M, R;
     private int v, A, B, n, b;
 
-    private BigInteger S = new BigInteger("0");
-    private BigInteger V;
-    //private BigInteger U = new BigInteger(u);
-    private BigInteger N;
-
-    private randomNumber randomNumber = new randomNumber();
-
-    private String K;
-    private String M;
+    private BigInteger S, V, N;
 
 
-
-
-    public boolean authorizeClient(String I, int A) {
-
-
-
-        //Фаза 2
-        //Генерация подтверждения
-
-
-        return true;
-    }
-
-    public boolean checkA(){
+    public boolean checkA() {
         if (A == 0) return false;
         return true;
     }
 
-    public boolean checkU(){
+    public boolean checkU() {
         if (u.equals("0")) return false;//todo
         return true;
     }
 
-    public boolean checkI(String I){
+    public boolean checkI(String I) {
         if (!this.I.equals(I)) return false;
         return true;
     }
@@ -66,9 +46,9 @@ public class Server {
         this.v = v;
     }
 
-    public void setN(int n){
+    public void setN(int n) {
         this.n = n;
-    }
+        }
 
     public String getSalt() {
         return s;
@@ -80,7 +60,7 @@ public class Server {
 
     public void findB() {
         b = randomNumber.getRandomNumberInRange(2, 1000);
-        BigInteger bigB = new BigInteger("0");
+        BigInteger bigB;
         BigInteger B = new BigInteger(Integer.toString(b));
         BigInteger K = new BigInteger(Integer.toString(k));
         V = new BigInteger(Integer.toString(v));
@@ -108,29 +88,28 @@ public class Server {
         shaUtils = new shaUtils(I.getBytes(), "SHA-256");
         HI = shaUtils.getHashedString();
 
-        M = biM.toString() + HI + S.toString() + A + B + k;
+        M = biM.toString() + "|" + HI + "|"  + S.toString() + "|"  + A + "|"  + B + "|"  + k;
         shaUtils = new shaUtils(M.getBytes(), "SHA-256");
         M = shaUtils.getHashedString();
+        System.out.println("Servers M = " + M);
 
-        if (clientM == M) {
-            System.out.println("M = " + M + "\nM are the same");
+        if (clientM.equals(M)) {
             return true;
         }
-        else {
-            System.out.println("M are different");
-            return false;
-        }
+        return false;
+
 
     }
 
-    public String getR() {
-        String R;
-
+    public void calculateR() {
         //R = H (A, M, K)
         String temp = A + M + K;
         shaUtils = new shaUtils(temp.getBytes(), "SHA-256");
         R = shaUtils.getHashedString();
+        System.out.println("Servers R = " + R);
+    }
 
+    public String getR() {
         return R;
     }
 
@@ -140,10 +119,10 @@ public class Server {
         shaUtils shaUtils = new shaUtils(AB.getBytes(UTF_8), "SHA-256");
         u = shaUtils.getHashedString();
         //u = u.substring(0, 4);
-        System.out.println("Server's u = " + u);
+        //System.out.println("Server's u = " + u);
     }
 
-    public void generateKey(){
+    public void generateKey() {
         //Генерируем общий ключ сессии
         BigInteger bigA = new BigInteger(Integer.toString(A));
         BigInteger U = new BigInteger(u, 16);
@@ -151,10 +130,6 @@ public class Server {
         S = bigA.multiply(S);
         BigInteger B = new BigInteger(Integer.toString(b));
         S = S.modPow(B, N);
-        //S = S.pow(b);
-        //S = S.mod(N);
-
-        System.out.println("Server's S = " + S.toString());
 
         shaUtils = new shaUtils(S.toByteArray(), "SHA-256");
         K = shaUtils.getHashedString();

@@ -13,10 +13,15 @@ public class Connection {
     }
 
     void distributeN(){
-        int q = randomNumber.getPrimeNumber(100);
-        n = 2 * q + 1;
+        int q;
+        do{
+            q = randomNumber.getPrimeNumber(1000);
+            n = 2 * q + 1;
+        }while (!randomNumber.RabinMillerTest(n));
+
         server.setN(n);
         client.setN(n);
+        System.out.println("N = " + n);
     }
 
     void registerClientOnServer(){
@@ -45,11 +50,25 @@ public class Connection {
 
         client.generateKey();
         server.generateKey();
+        System.out.println();
 
         return true;
     }
 
     boolean authenticationPhase2(){
+        client.calculateM();
+        if(!server.compareM(client.getM())) {
+            System.out.println("M-s are different");
+            return false;
+        }
+        System.out.println();
+
+        server.calculateR();
+        if(!client.compareR(server.getR())) {
+            System.out.println("R-s are different");
+            return false;
+        }
+
         return true;
     }
 

@@ -5,6 +5,7 @@ public class Main {
         Connection connection = new Connection(server, client);
         connection.registerClientOnServer();
         connection.authenticationPhase1();
+        connection.authenticationPhase2();
     }
 
 }
