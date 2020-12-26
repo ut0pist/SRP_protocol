@@ -102,7 +102,6 @@ public class Server {
     }
 
     public void calculateR() {
-        //R = H (A, M, K)
         String temp = A + M + K;
         shaUtils = new shaUtils(temp.getBytes(), "SHA-256");
         R = shaUtils.getHashedString();

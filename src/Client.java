@@ -25,18 +25,15 @@ public class Client {
 
     public void registerOnServer() {
 
-        /*for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             char temp = (char) randomNumber.getRandomNumberInRange(97, 122);
             s += temp;
-        }*/
-        s = "Hello";
-        //p = "password";
+        }
+        //s = "Hello";
         String sP = s + "|" + p;
 
         shaUtils = new shaUtils(sP.getBytes(UTF_8), "SHA-256");
         x = shaUtils.getHashedString();
-        //x = x.substring(0, 4);
-        //Т.к. x является очень большим 256-битным числом, то возводить в степень этого числа на слабом железе не выйдет. Поэтому я обрежу x до 4-х цифр.
 
         X = new BigInteger(x, 16);
         G = new BigInteger(Integer.toString(g));
@@ -91,7 +88,6 @@ public class Client {
     public boolean compareR(String serverR) {
         String R;
 
-        //R = H (A, M, K)
         String temp = bigA.toString() + M + K;
         shaUtils = new shaUtils(temp.getBytes(), "SHA-256");
         R = shaUtils.getHashedString();
@@ -116,7 +112,6 @@ public class Client {
         String AB = A + "|" + B;
         shaUtils = new shaUtils(AB.getBytes(UTF_8), "SHA-256");
         u = shaUtils.getHashedString();
-        //u = u.substring(0, 4);
         //System.out.println("Client's u = " + u);
     }
 
